@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игра "Память"</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .grid { display: grid; grid-template-columns: repeat(4, 100px); gap: 10px; justify-content: center; }
+        .card { width: 100px; height: 100px; font-size: 2rem; display: flex; align-items: center; justify-content: center; background: #ddd; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<h2>Игра "Память"</h2>
+<div class="grid" id="game"></div>
+<button onclick="sendResult()">Завершить игру</button>
+
+<script>
+    let tg = window.Telegram.WebApp;
+    tg.expand();  // Разворачиваем WebView
+
+    const emojis = ['🐶', '🐱', '🐹', '🐰', '🐻', '🐷', '🐸', '🦄'];
+    let cards = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
+    let opened = [];
+    let matched = 0;
+
+    function createBoard() {
+        let board = document.getElementById("game");
+        board.innerHTML = "";
+        cards.forEach((emoji, index) => {
+            let div = document.createElement("div");
+            div.classList.add("card");
+            div.dataset.index = index;
+            div.onclick = () => flipCard(div, emoji);
+            div.innerHTML = "❓";
+            board.appendChild(div);
+        });
+    }
+
+    function flipCard(card, emoji) {
+        if (opened.length < 2 && !card.classList.contains("matched")) {
+            card.innerHTML = emoji;
+            opened.push({ card, emoji });
+
+            if (opened.length === 2) {
+                if (opened[0].emoji === opened[1].emoji) {
+                    opened.forEach(c => c.card.classList.add("matched"));
+                    matched += 2;
+                    if (matched === cards.length) alert("Вы выиграли!");
+                } else {
+                    setTimeout(() => {
+                        opened.forEach(c => c.card.innerHTML = "❓");
+                    }, 1000);
+                }
+                opened = [];
+            }
+        }
+    }
+
+    function sendResult() {
+        let result = matched === cards.length ? "Победа!" : `Открыто пар: ${matched / 2}`;
+        tg.sendData(result);
+        tg.close();
+    }
+
+    createBoard();
+</script>
+
+</body>
+</html>
