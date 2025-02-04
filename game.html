@@ -3,14 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Игра "Память"</title>
+    <title>RETRO MEMORY</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        @font-face {
+            font-family: 'PressStart2P';
+            src: url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'PressStart2P', cursive;
             text-align: center;
-            background: linear-gradient(135deg, #1e1e2e, #282a36);
-            color: white;
+            background: #0f380f;
+            color: #9bbc0f;
             margin: 0;
             display: flex;
             flex-direction: column;
@@ -20,93 +25,91 @@
         }
 
         h2 {
-            font-size: 26px;
+            font-size: 20px;
             margin-bottom: 15px;
+            text-shadow: 2px 2px #306230;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(4, 100px);
-            gap: 12px;
+            grid-template-columns: repeat(4, 80px);
+            gap: 8px;
             justify-content: center;
-            background: rgba(40, 42, 54, 0.9);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            background: #306230;
+            padding: 16px;
+            border-radius: 8px;
+            border: 4px solid #9bbc0f;
         }
 
         .card {
-            width: 100px;
-            height: 100px;
-            font-size: 2.5rem;
+            width: 80px;
+            height: 80px;
+            font-size: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #44475a;
-            color: white;
-            border-radius: 10px;
+            background: #8bac0f;
+            color: #0f380f;
+            border-radius: 4px;
             cursor: pointer;
-            transition: transform 0.2s, background 0.3s, box-shadow 0.3s;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.1s, background 0.2s;
+            border: 2px solid #9bbc0f;
         }
 
         .card:hover {
-            transform: scale(1.08);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .card.flipped {
-            background: #50fa7b;
-            color: black;
             transform: scale(1.05);
         }
 
-        .card.matched {
-            background: #ff79c6;
+        .card.flipped {
+            background: #9bbc0f;
             color: black;
+        }
+
+        .card.matched {
+            background: #306230;
+            color: #9bbc0f;
             pointer-events: none;
         }
 
         button {
-            background: #6272a4;
-            color: white;
-            font-size: 18px;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            margin-top: 20px;
+            background: #8bac0f;
+            color: #0f380f;
+            font-size: 14px;
+            border: 3px solid #9bbc0f;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 15px;
             cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: 0.2s;
+            font-family: 'PressStart2P', cursive;
         }
 
         button:hover {
-            background: #50fa7b;
+            background: #9bbc0f;
             color: black;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         }
 
         #win-message {
             display: none;
-            font-size: 22px;
-            margin-top: 20px;
-            color: #50fa7b;
-            font-weight: bold;
+            font-size: 18px;
+            margin-top: 15px;
+            color: #9bbc0f;
+            text-shadow: 2px 2px #306230;
         }
     </style>
 </head>
 <body>
 
-<h2>Игра "Память"</h2>
+<h2>🎮 RETRO MEMORY</h2>
 <div class="grid" id="game"></div>
-<p id="win-message">🎉 Поздравляем, вы выиграли! 🎉</p>
-<button onclick="sendResult()">Завершить игру</button>
+<p id="win-message">🏆 YOU WIN! 🏆</p>
+<button onclick="sendResult()">EXIT</button>
 
 <script>
     let tg = window.Telegram.WebApp;
-    tg.expand(); 
+    tg.expand();  
 
-    const emojis = ['🐶', '🐱', '🐹', '🐰', '🐻', '🐷', '🐸', '🦄'];
+    const emojis = ['🕹️', '🎲', '🎮', '💾', '📼', '🖥️', '🎵', '📺'];
     let cards = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
     let opened = [];
     let matched = 0;
@@ -134,7 +137,7 @@
 
         if (opened.length === 2) {
             lockBoard = true;
-            setTimeout(checkMatch, 1000);
+            setTimeout(checkMatch, 800);
         }
     }
 
@@ -159,7 +162,7 @@
     }
 
     function sendResult() {
-        let result = matched === cards.length ? "🎉 Поздравляем, вы выиграли! 🎉" : `Открыто пар: ${matched / 2}`;
+        let result = matched === cards.length ? "🏆 YOU WIN! 🏆" : `Pairs matched: ${matched / 2}`;
         tg.sendData(result);
         tg.close();
     }
