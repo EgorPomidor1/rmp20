@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Игра "Память"</title>
+    <title>RETRO MEMORY</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         @font-face {
@@ -157,14 +157,14 @@
 
         if (matched === cards.length) {
             document.getElementById("win-message").style.display = "block";
-            sendResult();
+            setTimeout(sendResult, 2000);
         }
     }
 
     function sendResult() {
         let result = matched === cards.length ? "🏆 YOU WIN! 🏆" : `Pairs matched: ${matched / 2}`;
         tg.sendData(result);
-        tg.close();
+        setTimeout(() => tg.close(), 1000);
     }
 
     createBoard();
