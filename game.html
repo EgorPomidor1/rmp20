@@ -9,7 +9,7 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background: #1e1e2e;
+            background: linear-gradient(135deg, #1e1e2e, #282a36);
             color: white;
             margin: 0;
             display: flex;
@@ -20,41 +20,45 @@
         }
 
         h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
+            font-size: 26px;
+            margin-bottom: 15px;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(4, 80px);
-            gap: 10px;
+            grid-template-columns: repeat(4, 100px);
+            gap: 12px;
             justify-content: center;
-            background: #282a36;
+            background: rgba(40, 42, 54, 0.9);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
         }
 
         .card {
-            width: 80px;
-            height: 80px;
-            font-size: 2rem;
+            width: 100px;
+            height: 100px;
+            font-size: 2.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
             background: #44475a;
             color: white;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: transform 0.3s, background 0.3s;
+            transition: transform 0.2s, background 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         .card:hover {
-            transform: scale(1.05);
+            transform: scale(1.08);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         }
 
         .card.flipped {
             background: #50fa7b;
             color: black;
+            transform: scale(1.05);
         }
 
         .card.matched {
@@ -68,23 +72,26 @@
             color: white;
             font-size: 18px;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            margin-top: 15px;
+            padding: 12px 24px;
+            border-radius: 6px;
+            margin-top: 20px;
             cursor: pointer;
             transition: 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         button:hover {
             background: #50fa7b;
             color: black;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         }
 
         #win-message {
             display: none;
-            font-size: 20px;
-            margin-top: 15px;
+            font-size: 22px;
+            margin-top: 20px;
             color: #50fa7b;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -97,7 +104,7 @@
 
 <script>
     let tg = window.Telegram.WebApp;
-    tg.expand();  // Разворачиваем WebView
+    tg.expand(); 
 
     const emojis = ['🐶', '🐱', '🐹', '🐰', '🐻', '🐷', '🐸', '🦄'];
     let cards = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
@@ -146,8 +153,8 @@
         lockBoard = false;
 
         if (matched === cards.length) {
-            document.getElementById("win-message").style.display = "block"; // Показываем сообщение о победе
-            sendResult(); // Отправляем результат в бота
+            document.getElementById("win-message").style.display = "block";
+            sendResult();
         }
     }
 
